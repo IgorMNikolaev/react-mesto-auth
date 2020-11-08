@@ -1,4 +1,5 @@
 import React from "react";
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -8,50 +9,12 @@ import api from "../utils/api.js";
 import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
-import First from './First';
-import Second from './Second';
-import Third from './Third';
-import Fourth from './Fourth';
+import ProtectedRoute from './ProtectedRoute';
+import Login from './Login';
+import Register from './Register';
+import InfoTooltip from './InfoTooltip';
 
 function App() {
-  const [data, setData] = React.useState({
-    one:'',
-    two:'',
-    three:'',
-  });
-
-const first = () => {
-  setData({...data,
-    one:'работает',
-    two:'',
-    three:'',})
-}
-
-const second = () => {
-  setData({...data,
-    one:'',
-    two:'работает',
-    three:'',})
-}
-
-const third = () => {
-  setData({...data,
-    one:'',
-    two:'',
-    three:'работает',})
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(
     false
@@ -61,6 +24,9 @@ const third = () => {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({ name: "", about: "" });
   const [cards, setCards] = React.useState([]);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [userData, setUserData] = React.useState({username:'', email:'',})
+  const history = useHistory();
 
   React.useEffect(() => {
     api
@@ -166,43 +132,50 @@ const third = () => {
       });
   };
 
-  return (
-    <>
-    {data.one ==='работает'&& <First />}
-    {data.two ==='работает'&& <Second />}
-    {data.three ==='работает'&& <Third />}
-    <Fourth first={first} second={second} third={third} />
+  const handleLoggIn =() => {
+    setLoggedIn(true);
+    setUserData(userData);
+  }
 
-    </>
-    // <CurrentUserContext.Provider value={currentUser}>
-    //   <Header />
-    //   <Main
-    //     onEditAvatar={handleEditAvatarClick}
-    //     onEditProfile={handleEditProfileClick}
-    //     onAddPlace={handleAddPlaceClick}
-    //     onCardClick={handleCardClick}
-    //     cards={cards}
-    //     onCardLike={handleCardLike}
-    //     onCardDelete={handleCardDelete}
-    //   />
-    //   <Footer />
-    //   <EditProfilePopup
-    //     isOpen={isEditProfilePopupOpen}
-    //     onClose={closeAllPopups}
-    //     onUpdateUser={handleUpdateUser}
-    //   />
-    //   <AddPlacePopup
-    //     isOpen={isAddPlacePopupOpen}
-    //     onClose={closeAllPopups}
-    //     onAddPlace={handleAddNewCard}
-    //   />
-    //   <EditAvatarPopup
-    //     isOpen={isEditAvatarPopupOpen}
-    //     onClose={closeAllPopups}
-    //     onUpdateAvatar={handleUpdateAvatar}
-    //   />
-    //   <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-    // </CurrentUserContext.Provider>
+  return (
+<Switch>
+    <CurrentUserContext.Provider value={currentUser}>
+
+      <Header loggedIn={loggedIn}/>
+      <ProtectedRoute path="/main" loggedIn={loggedIn} onEditAvatar={handleEditAvatarClick}
+        onEditProfile={handleEditProfileClick}
+        onAddPlace={handleAddPlaceClick}
+        onCardClick={handleCardClick}
+        cards={cards}
+        onCardLike={handleCardLike}
+        onCardDelete={handleCardDelete} component={Main} />
+      <Route path="/sign-in">
+        <Login />
+      </Route>
+      <Route path="/sign-up">
+        <Register />
+      </Route>
+      <Footer />
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+      />
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onAddPlace={handleAddNewCard}
+      />
+      <EditAvatarPopup
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+    </CurrentUserContext.Provider>
+    </Switch>
+
+
 );
 }
 

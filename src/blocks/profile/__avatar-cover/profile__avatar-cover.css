@@ -1,0 +1,21 @@
+.profile__avatar-cover {
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  width: 122px;
+  height: 122px;
+  border-radius: 60px;
+  padding: 0;
+  border: none;
+  margin: auto;
+  margin-left: -1px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.profile__avatar-cover:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  background-image: url(../../../images/pencil.png);
+}

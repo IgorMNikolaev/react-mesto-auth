@@ -1,0 +1,9 @@
+.popup__input-cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 83.25%;
+  margin-top: 30px;
+  position: relative;
+}

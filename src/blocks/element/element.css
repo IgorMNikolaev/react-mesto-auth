@@ -1,0 +1,19 @@
+@import url(./__image/element__image.css);
+@import url(./__like/element__like.css);
+@import url(./__like/_activ/element__like_activ.css);
+@import url(./__name/element__name.css);
+@import url(./__description/element__description.css);
+@import url(./__trash/element__trash.css);
+@import url(./__trash-button/element__trash-button.css);
+@import url(./__trash-button/_inactiv/element__trash-button-inactiv.css);
+@import url(./__like-counter/element__like-counter.css);
+@import url(./__like-count/element__like-count.css);
+
+.element {
+  position: relative;
+  margin: 0 auto;
+  height: 361px;
+  object-fit: cover;
+  border-radius: 10px;
+  background-color: #ffffff;
+}

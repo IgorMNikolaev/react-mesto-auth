@@ -1,0 +1,33 @@
+@import url(./__container/popup__container.css);
+@import url(./__title/popup__title.css);
+@import url(./__form/popup__form.css);
+@import url(./__submit-button/popup__submit-button.css);
+@import url(./__submit-button_disabled/popup__submit-button_disabled.css);
+@import url(./__close-button/popup__close-button.css);
+@import url(./__input/popup__input.css);
+@import url(./__input_invalid/popup__input_invalid.css);
+@import url(./__container-image/popup__container-image.css);
+@import url(./__image/popup__image.css);
+@import url(./__name/popup__name.css);
+@import url(./__input-cover/popup__input-cover.css);
+@import url(./__input-error/popup__input-error.css);
+@import url(./__loading/popup__loading.css);
+@import url(./__loading-text/popup__loading-text.css);
+@import url(./__submit-button_invisible/popup__submit-button_invisible.css);
+@import url(./__loading_visible/popup__loading_visible.css);
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s linear 0s, opacity 0.4s linear;
+}

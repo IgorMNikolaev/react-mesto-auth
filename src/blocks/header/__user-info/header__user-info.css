@@ -1,0 +1,5 @@
+.header__user-info {
+  display: flex;
+  flex-direction: row;
+  max-height: 100px;
+}

@@ -15,6 +15,14 @@
 @import url(./__loading-text/popup__loading-text.css);
 @import url(./__submit-button_invisible/popup__submit-button_invisible.css);
 @import url(./__loading_visible/popup__loading_visible.css);
+@import url(./__status/popup__status.css);
+@import url(./__container/popup__container_status.css);
+@import url(./__title_white/popup__title_white.css);
+@import url(./__submit-button_status/popup__submit-button_status.css);
+@import url(./__input_status/popup__input_status.css);
+@import url(./__login-link/popup__login-link.css);
+@import url(./__infotip-text/popup__infotip-text.css);
+@import url(./__infotip-img/popup__infotip-img.css);
 
 .popup {
   position: fixed;

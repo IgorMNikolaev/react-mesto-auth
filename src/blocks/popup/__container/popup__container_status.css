@@ -1,17 +1,15 @@
-.popup__container {
+.popup__container_status {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 430px;
   position: relative;
-  background: #ffffff;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
   border-radius: 10px;
 }
 
 @media (max-width: 500px) {
-  .popup__container {
+  .popup__container_status {
     width: 80%;
   }
 }

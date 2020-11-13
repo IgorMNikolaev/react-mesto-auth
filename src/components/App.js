@@ -144,7 +144,8 @@ function App() {
       });
   };
 
-  const handleLogin = (userData) => {
+  const handleLogin = () => {
+    console.log(userData);
     setLoggedIn(true);
     setUserData(userData);
   };

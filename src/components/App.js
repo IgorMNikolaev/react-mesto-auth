@@ -145,7 +145,6 @@ function App() {
   };
 
   const handleLogin = () => {
-    console.log(userData);
     setLoggedIn(true);
     setUserData(userData);
   };

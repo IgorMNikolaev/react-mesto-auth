@@ -13,8 +13,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Register from "./Register";
 import InfoTooltip from "./InfoTooltip";
-import { getToken, removeToken } from "../utils/token";
-import { getContent } from "../utils/auth";
+import { getToken, removeToken, setToken } from "../utils/token";
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(
@@ -29,7 +28,11 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [userData, setUserData] = React.useState({ email: "" });
   const [registerSuccess, setRegisterSuccess] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [isLoading, setLoading] = React.useState(false);
   const history = useHistory();
+
+  const BASE_URL = "https://auth.nomoreparties.co";
 
   React.useEffect(() => {
     tokenCheck();
@@ -84,6 +87,7 @@ function App() {
   }
 
   function handleUpdateUser(info) {
+    setLoading(true);
     api
       .profileInfoEdit(info)
       .then((res) => {
@@ -92,10 +96,12 @@ function App() {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(setLoading(false));
   }
 
   function handleUpdateAvatar(avatarUrl) {
+    setLoading(true);
     api
       .profileAvatarEdit(avatarUrl)
       .then((res) => {
@@ -104,10 +110,12 @@ function App() {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(setLoading(false));
   }
 
   function handleAddNewCard(name, link) {
+    setLoading(true);
     api
       .postNewCard(name, link)
       .then((newcard) => {
@@ -116,7 +124,8 @@ function App() {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(setLoading(false));
   }
 
   const handleCardLike = ({ likes, _id }) => {
@@ -173,18 +182,87 @@ function App() {
     history.push("/sign-in");
   }
 
+  const register = (email, password) => {
+    return fetch(`${BASE_URL}/signup`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+        if (res.data) {
+          setMessage("");
+          isSuccess(true);
+          infoTooltipOpen();
+          history.push("/sign-in");
+        } else {
+          setMessage("Что-то пошло не так!");
+          isSuccess(false);
+          infoTooltipOpen();
+        }
+      });
+  };
+
+  const authorize = (email, password) => {
+    return fetch(`${BASE_URL}/signin`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.token) {
+          setToken(data.token);
+          return data.token;
+        } else {
+          return;
+        }
+      })
+      .then((token) => {
+        if (!token) {
+          setMessage("Что-то пошло не так!");
+        }
+        if (token) {
+          setToken(token);
+          setMessage("");
+          handleLogin();
+          history.push("/");
+        }
+      });
+  };
+
+  const getContent = (token) => {
+    return fetch(`${BASE_URL}/users/me`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+  };
+
+  const isSuccess = (x) => setRegisterSuccess(x);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header onSignOut={onSignOut} userData={userData} />
       <Switch>
         <Route path="/sign-in">
-          <Login handleLogin={handleLogin} />
+          <Login authorize={authorize} message={message} />
         </Route>
         <Route path="/sign-up">
-          <Register
-            infoTooltipOpen={infoTooltipOpen}
-            setSuccess={setRegisterSuccess}
-          />
+          <Register register={register} message={message} />
         </Route>
         <ProtectedRoute
           path="/"
@@ -204,16 +282,19 @@ function App() {
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
         onUpdateUser={handleUpdateUser}
+        isLoading={isLoading}
       />
       <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
         onAddPlace={handleAddNewCard}
+        isLoading={isLoading}
       />
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
         onClose={closeAllPopups}
         onUpdateAvatar={handleUpdateAvatar}
+        isLoading={isLoading}
       />
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       <InfoTooltip

@@ -1,14 +1,9 @@
 import React from "react";
 import UserStatusWithForm from "./UserStatusWithForm";
-import { useHistory } from "react-router-dom";
-import { authorize } from "../utils/auth";
-import { setToken } from "../utils/token";
 
-function Login({ handleLogin }) {
+function Login({ authorize, message }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [message, setMessage] = React.useState("");
-  const history = useHistory();
 
   function handleEmailChange(e) {
     setEmail(e.target.value);
@@ -20,24 +15,14 @@ function Login({ handleLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!email || !password) {
       return;
     }
-
     authorize(email, password)
       .then((token) => {
-        if (!token) {
-          setMessage("Что-то пошло не так!");
-        }
-
         if (token) {
-          setToken(token);
           setEmail("");
           setPassword("");
-          setMessage("");
-          handleLogin();
-          history.push("/");
         }
       })
       .catch((err) => console.log(err));

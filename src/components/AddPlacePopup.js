@@ -1,7 +1,7 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace, ...rest }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading, ...rest }) {
   const [name, setName] = React.useState("");
   const [link, setLink] = React.useState("");
 
@@ -25,6 +25,9 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, ...rest }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      submitText="Создать"
+      submitLoadText="Создание..."
+      isLoading={isLoading}
     >
       <div className="popup__input-cover">
         <input
@@ -51,12 +54,6 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, ...rest }) {
         />
         <span className="popup__input-error"></span>
       </div>
-      <button type="submit" className="popup__submit-button">
-        Создать
-      </button>
-      <button className="popup__loading" disabled>
-        <p className="popup__loading-text">Создание...</p>
-      </button>
     </PopupWithForm>
   );
 }

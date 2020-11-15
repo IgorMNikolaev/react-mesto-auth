@@ -2,7 +2,7 @@ import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import PopupWithForm from "./PopupWithForm";
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser, ...rest }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading, ...rest }) {
   const currentUser = React.useContext(CurrentUserContext);
 
   const [name, setName] = React.useState("");
@@ -36,6 +36,9 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, ...rest }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      submitText="Сохранить"
+      submitLoadText="Сохранение..."
+      isLoading={isLoading}
     >
       <div className="popup__input-cover">
         <input
@@ -63,12 +66,6 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, ...rest }) {
         />
         <span className="popup__input-error"></span>
       </div>
-      <button type="submit" className="popup__submit-button">
-        Сохранить
-      </button>
-      <button className="popup__loading" disabled>
-        <p className="popup__loading-text">Сохранение...</p>
-      </button>
     </PopupWithForm>
   );
 }

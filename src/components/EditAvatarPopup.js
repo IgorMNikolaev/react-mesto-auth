@@ -1,7 +1,7 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, ...rest }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading, ...rest }) {
   const avatarRef = React.useRef();
 
   function handleSubmit(e) {
@@ -17,6 +17,9 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, ...rest }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      submitText="Сохранить"
+      submitLoadText="Сохранение..."
+      isLoading={isLoading}
     >
       <div className="popup__input-cover">
         <input
@@ -29,12 +32,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, ...rest }) {
         />
         <span className="popup__input-error"></span>
       </div>
-      <button type="submit" className="popup__submit-button">
-        Сохранить
-      </button>
-      <button className="popup__loading" disabled>
-        <p className="popup__loading-text">Сохранение...</p>
-      </button>
     </PopupWithForm>
   );
 }

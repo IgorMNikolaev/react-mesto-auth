@@ -1,38 +1,24 @@
 import React from "react";
 import UserStatusWithForm from "./UserStatusWithForm";
-import { Link, useHistory } from "react-router-dom";
-import { register } from "../utils/auth";
+import { Link } from "react-router-dom";
 
-function Register({ infoTooltipOpen, setSuccess }) {
+function Register({ register, message }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [message, setMessage] = React.useState("");
-  const history = useHistory();
-
-  const isSuccess = (x) => setSuccess(x);
-  function handleEmailChange(e) {
-    setEmail(e.target.value);
-  }
 
   function handlePasswordChange(e) {
     setPassword(e.target.value);
   }
 
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    register(email, password).then((res) => {
-      if (res.data) {
-        setMessage("");
-        history.push("/sign-in");
-        isSuccess(true);
-        infoTooltipOpen();
-      } else {
-        isSuccess(false);
-        infoTooltipOpen();
-        setMessage("Что-то пошло не так!");
-      }
-    });
-  };
+    register(email, password)
+    .catch((err) => console.log(err));
+  }
 
   return (
     <UserStatusWithForm

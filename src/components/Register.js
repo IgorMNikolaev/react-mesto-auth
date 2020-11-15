@@ -16,9 +16,8 @@ function Register({ register, message }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    register(email, password)
-    .catch((err) => console.log(err));
-  }
+    register(email, password).catch((err) => console.log(err));
+  };
 
   return (
     <UserStatusWithForm

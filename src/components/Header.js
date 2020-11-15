@@ -2,7 +2,6 @@ import React from "react";
 import { Route, Switch, Link } from "react-router-dom";
 
 function Header({ onSignOut, userData }) {
-
   const { email } = userData;
   return (
     <header className="header">

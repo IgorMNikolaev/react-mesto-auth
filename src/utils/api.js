@@ -1,12 +1,18 @@
-class Api {
-  constructor({ baseUrl, headers }) {
+import { getToken } from "./token";
+
+export default class Api {
+  constructor({ baseUrl, getHeaders }) {
     this.baseUrl = baseUrl;
-    this.headers = headers;
+    this.getHeader = getHeaders;
   }
 
   _getInitial() {
+    const token = getToken();
     return fetch(`${this.baseUrl}/cards`, {
-      headers: this.headers,
+      headers:{
+            authorization: `Bearer ${token}`,
+            "content-type": "application/json",
+          },
     }).then((res) => {
       if (res.ok) {
         return res.json();
@@ -16,8 +22,14 @@ class Api {
   }
 
   _getProfileInfo() {
+    const token = getToken();
+
     return fetch(`${this.baseUrl}/users/me`, {
-      headers: this.headers,
+      headers:{
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      authorization: `Bearer ${token}`,
     }).then((res) => {
       if (res.ok) {
         return res.json();
@@ -27,10 +39,15 @@ class Api {
   }
 
   profileInfoEdit(info) {
+    const token = getToken();
     const { name, description: about } = info;
     return fetch(`${this.baseUrl}/users/me`, {
       method: "PATCH",
-      headers: this.headers,
+      headers:{
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      authorization: `Bearer ${token}`,
       body: JSON.stringify({
         name: `${name}`,
         about: `${about}`,
@@ -44,9 +61,14 @@ class Api {
   }
 
   profileAvatarEdit(avatarUrl) {
+    const token = getToken();
     return fetch(`${this.baseUrl}/users/me/avatar`, {
       method: "PATCH",
-      headers: this.headers,
+      headers:{
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      authorization: `Bearer ${token}`,
       body: JSON.stringify({
         avatar: avatarUrl,
       }),
@@ -59,9 +81,14 @@ class Api {
   }
 
   postNewCard(name, link) {
+    const token = getToken();
     return fetch(`${this.baseUrl}/cards`, {
       method: "POST",
-      headers: this.headers,
+      headers:{
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      authorization: `Bearer ${token}`,
       body: JSON.stringify({
         name: name,
         link: link,
@@ -75,9 +102,14 @@ class Api {
   }
 
   deleteCard(_id) {
+    const token = getToken();
     return fetch(`${this.baseUrl}/cards/${_id}`, {
       method: "DELETE",
-      headers: this.headers,
+      headers:{
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      authorization: `Bearer ${token}`,
     }).then((res) => {
       if (res.ok) {
         return res.json();
@@ -87,9 +119,14 @@ class Api {
   }
 
   setLike(cardId) {
+    const token = getToken();
     return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
       method: "PUT",
-      headers: this.headers,
+      headers:{
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      authorization: `Bearer ${token}`,
     }).then((res) => {
       if (res.ok) {
         return res.json();
@@ -99,9 +136,14 @@ class Api {
   }
 
   deleteLike(cardId) {
+    const token = getToken();
     return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
       method: "DELETE",
-      headers: this.headers,
+      headers:{
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
+      },
+      authorization: `Bearer ${token}`,
     }).then((res) => {
       if (res.ok) {
         return res.json();
@@ -114,13 +156,3 @@ class Api {
     return Promise.all([this._getInitial(), this._getProfileInfo()]);
   }
 }
-
-const api = new Api({
-  baseUrl: "https://mesto.nomoreparties.co/v1/cohort-14",
-  headers: {
-    authorization: "ec93ee6a-cab3-4375-91a2-83f97b61093a",
-    "content-type": "application/json",
-  },
-});
-
-export default api;

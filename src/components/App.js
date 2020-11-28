@@ -5,7 +5,7 @@ import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import api from "../utils/api.js";
+import Api from "../utils/api.js";
 import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -32,13 +32,14 @@ function App() {
   const [isLoading, setLoading] = React.useState(false);
   const history = useHistory();
 
-  const BASE_URL = "https://auth.nomoreparties.co";
+  const BASE_URL = "http://localhost:3000";
 
-  React.useEffect(() => {
-    tokenCheck();
-  }, []);
 
-  React.useEffect(() => {
+const api = new Api({
+  baseUrl: "http://localhost:3000",
+});
+
+const getData = () => {
     api
       .getInitialData()
       .then((response) => {
@@ -52,10 +53,16 @@ function App() {
         }));
         setCards(items);
         setCurrentUser(profileInfo);
+        setUserData({email:profileInfo.email})
+
       })
       .catch((error) => {
         console.log(error);
       });
+}
+
+  React.useEffect(() => {
+    tokenCheck();
   }, []);
 
   const handleCardClick = (card) => {
@@ -129,7 +136,7 @@ function App() {
   }
 
   const handleCardLike = ({ likes, _id }) => {
-    const isLiked = likes.some((i) => i._id === currentUser._id);
+    const isLiked = likes.some((i) => i === currentUser._id);
     (isLiked ? api.deleteLike(_id) : api.setLike(_id))
       .then((newCard) => {
         const newCards = cards.map((item) =>
@@ -155,7 +162,6 @@ function App() {
 
   const handleLogin = () => {
     setLoggedIn(true);
-    setUserData(userData);
   };
 
   const tokenCheck = () => {
@@ -167,11 +173,8 @@ function App() {
 
     getContent(jwt).then((res) => {
       if (res) {
-        const userData = {
-          email: res.data.email,
-        };
+        getData();
         setLoggedIn(true);
-        setUserData(userData);
         history.push("/");
       }
     });
@@ -195,8 +198,6 @@ function App() {
         return res.json();
       })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
         if (res.data) {
           setMessage("");
           isSuccess(true);
@@ -236,6 +237,7 @@ function App() {
           setToken(token);
           setMessage("");
           handleLogin();
+          getData();
           history.push("/");
         }
       });

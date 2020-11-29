@@ -32,11 +32,11 @@ function App() {
   const [isLoading, setLoading] = React.useState(false);
   const history = useHistory();
 
-  const BASE_URL = "http://localhost:3000";
+  const BASE_URL = "https://api.numberfive.students.nomoredomains.monster";
 
 
 const api = new Api({
-  baseUrl: "http://localhost:3000",
+  baseUrl: "https://api.numberfive.students.nomoredomains.monster",
 });
 
 const getData = () => {

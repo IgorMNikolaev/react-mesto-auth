@@ -18,7 +18,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "npm run build && scp -r ./build/* bujhm@84.201.152.213:/home/bujhm/news-frontend"
   },
   "eslintConfig": {
     "extends": "react-app"
